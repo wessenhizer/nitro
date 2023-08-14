@@ -1,21 +1,23 @@
 -module(wf_render).
 -include_lib("nitro/include/nitro.hrl").
--export([render/1]).
+-export([render/1, render1/1]).
 
 
 render(R) ->
-  [r(E) || E <- lists:flatten([R]), E /= undefined, E /= nil, E /= <<>>].
-  % unicode:characters_to_binary(L).
+  [r(esc, E) || E <- lists:flatten([R]), E /= undefined, E /= nil, E /= <<>>].
+
+render1(R) ->
+  [r(no, E) || E <- lists:flatten([R]), E /= undefined, E /= nil, E /= <<>>].
 
 
-r(E) when element(2,E) =:= element -> wf_render_elements:render_element(E);
-r(E) when element(2,E) =:= action  -> wf_render_actions:render_action(E);
-r(R) when is_binary(R) -> [r(E) || E <- unicode:characters_to_list(R)];
-r(A) when is_atom(A) -> atom_to_list(A);
-r($<) -> "&lt;";
-r($>) -> "&gt;";
-r($") -> "&quot;";
-r(Any) -> Any.
+r(_, E) when element(2,E) =:= element -> wf_render_elements:render_element(E);
+r(_, E) when element(2,E) =:= action  -> wf_render_actions:render_action(E);
+r(Esc, R) when is_binary(R) -> [r(Esc, E) || E <- unicode:characters_to_list(R)];
+r(_, A) when is_atom(A) -> atom_to_list(A);
+r(esc, $<) -> "&lt;";
+r(esc, $>) -> "&gt;";
+r(esc, $") -> "&quot;";
+r(_, Any) -> Any.
 
 % item([]) -> <<>>;
 % item(undefined) -> <<>>;
