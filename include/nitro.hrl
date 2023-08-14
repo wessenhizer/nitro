@@ -105,7 +105,7 @@
 
 % HTML Grouping content
 -record(blockquote,		{?ELEMENT_BASE(element_blockquote),  cite}).
--record(br,       		?DEFAULT_BASE).
+-record(br,       		{?ELEMENT_BASE(element_br)}).
 -record(dd,       		?DEFAULT_BASE).
 -record('div',      	?DEFAULT_BASE_TAG(<<"div">>)).
 -record(dl,       		?DEFAULT_BASE).

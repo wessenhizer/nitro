@@ -1,15 +1,45 @@
 -module(wf_render).
 -include_lib("nitro/include/nitro.hrl").
--export([render_item/1, render/1]).
+-export([render/1]).
 
-render_item([]) -> <<>>;
-render_item(undefined) -> <<>>;
-render_item(E) when element(2,E) =:= element -> wf_render_elements:render_element(E);
-render_item(E) when element(2,E) =:= action  -> wf_render_actions:render_action(E);
-render_item(E) -> E.
 
-render([]) -> <<>>;
-render(undefined) -> <<>>;
-render(<<E/binary>>) -> E;
-render(Elements) when is_list(Elements) -> [ render_item(E) || E <- Elements, E /= undefined, E /= nil ];
-render(Elements) -> render_item(Elements).
+render(R) ->
+  [r(E) || E <- lists:flatten([R]), E /= undefined, E /= nil, E /= <<>>].
+  % unicode:characters_to_binary(L).
+
+
+r(E) when element(2,E) =:= element -> wf_render_elements:render_element(E);
+r(E) when element(2,E) =:= action  -> wf_render_actions:render_action(E);
+r(R) when is_binary(R) -> [r(E) || E <- unicode:characters_to_list(R)];
+r(A) when is_atom(A) -> atom_to_list(A);
+r($<) -> "&lt;";
+r($>) -> "&gt;";
+r($") -> "&quot;";
+r(Any) -> Any.
+
+% item([]) -> <<>>;
+% item(undefined) -> <<>>;
+% item(E) when element(2,E) =:= element -> wf_render_elements:render_element(E);
+% item(E) when element(2,E) =:= action  -> wf_render_actions:render_action(E);
+% item(E) -> e(E).
+
+% r([]) -> <<>>;
+% r(undefined) -> <<>>;
+% % r(<<E/binary>>) -> E;
+% r(Elements) when is_list(Elements) ->
+%   [ r(E) || E <- Elements, E /= undefined, E /= nil, E /= [], E /= <<>> ];
+% r(E) when element(2,E) =:= element -> wf_render_elements:render_element(E);
+% r(E) when element(2,E) =:= action  -> wf_render_actions:render_action(E);
+% r(Any) -> e(Any).
+
+
+% e([]) -> [];
+% e(R) when is_binary(R) -> e(unicode:characters_to_list(R));
+% e([$< | T]) -> "&lt;" ++ e(T);
+% e([$> | T]) -> "&gt;" ++ e(T);
+% e([$" | T]) -> "&quot;" ++ e(T);
+% % e(<<$<, T/binary>>) -> <<"&lt;", (e(T))/binary>>;
+% % e(<<$>,  T/binary>>) -> <<"&gt;", (e(T))/binary>>;
+% e([H | T]) when is_list(H); is_binary(H) -> [e(H) | e(T)];
+% e([H | T]) -> [H | e(T)];
+% e(Any) -> nitro:to_binary(Any).

@@ -96,7 +96,7 @@ to_binary(I) when is_integer(I) ->
     to_binary(integer_to_list(I));
 to_binary(F) when is_float(F) ->
     float_to_binary(F, [{decimals, 9}, compact]);
-to_binary(L) when is_list(L) -> iolist_to_binary(L);
+to_binary(L) when is_list(L) -> unicode:characters_to_binary(L);
 to_binary(X) when is_tuple(X) -> term_to_binary(X).
 
 -ifndef(PICKLER).
