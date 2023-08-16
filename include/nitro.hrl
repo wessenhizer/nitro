@@ -162,6 +162,7 @@
 -record(mark,           ?DEFAULT_BASE).
 -record(code,           ?DEFAULT_BASE).
 -record(span,           ?DEFAULT_BASE).
+-record(small,          ?DEFAULT_BASE).
 
 % Extras
 -record(upload,         {?CTRL_BASE(element_upload), name, value}).

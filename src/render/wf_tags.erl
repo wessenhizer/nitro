@@ -7,8 +7,9 @@
               orelse Tag == <<"input">>  orelse Tag == <<"link">>
               orelse Tag == <<"meta">>   orelse Tag == <<"param">>
               orelse Tag == <<"base">>   orelse Tag == <<"area">>
-              orelse Tag == <<"col">>    orelse Tag == <<"command">> orelse Tag == <<"option">>
-              orelse Tag == <<"keygen">> orelse Tag == <<"source">>)).
+              orelse Tag == <<"col">>    orelse Tag == <<"command">>
+              orelse Tag == <<"option">> orelse Tag == <<"keygen">>
+              orelse Tag == <<"source">>)).
 
 emit_tag(TagName, Props) -> [<<"<">>,TagName] ++ write_props(Props) ++ [<<"/>">>].
 emit_tag(TagName, undefined, Props) -> emit_tag(TagName, [], Props);
@@ -22,7 +23,7 @@ display_property({_, undefined}) -> [];
 display_property({_, []}) -> [];
 display_property({<<"class">>=Id, Value}) -> prop({Id,Value});
 display_property({<<"data-toggle">>=Id, Value}) -> prop({Id,Value});
-display_property({Prop, Value}) -> [<<" ">>, nitro:to_binary(Prop), <<"=\"">>, nitro:to_binary(Value), <<"\"">>].
+display_property({Prop, Value}) -> [<<" ">>, nitro:to_binary(Prop), <<"=\"">>, wf_render:tag(Value), <<"\"">>].
 
 prop({Id, Value}) when is_atom(Value) -> [<<" ">>,Id,<<"=\"">>, nitro:to_binary(Value), <<"\"">>];
 prop({Id, Value}) when is_binary(Value) -> [<<" ">>,Id,<<"=\"">>, Value, <<"\"">>];
