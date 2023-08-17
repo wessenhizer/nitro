@@ -5,6 +5,8 @@
 -define(CTX, (get(context))).
 -endif.
 
+-record(raw, {v}).
+
 -define(DEFAULT_BASE, {?ELEMENT_BASE([])}).
 -define(DEFAULT_BASE_TAG(Tag), {?ELEMENT_BASE([],Tag,[])}).
 -define(ELEMENT_BASE(Module), ?ELEMENT_BASE(Module,[],[])).

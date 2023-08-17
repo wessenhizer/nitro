@@ -24,6 +24,8 @@ r(Esc, [undefined|T]) -> r(Esc, T);
 r(Esc, [nil|T]) -> r(Esc, T);
 r(Esc, [[]|T]) -> r(Esc, T);
 r(Esc, [<<>>|T]) -> r(Esc, T);
+r(Esc, [A | T]) when is_atom(A) -> [atom_to_binary(A) | r(Esc, T)];
+r(Esc, [#raw{v = V} | T]) -> [V | r(Esc, T)];
 r(Esc, [E|T]) when element(2,E) =:= element ->
   [wf_render_elements:render_element(E) | r(Esc, T)];
 r(Esc, [E|T]) when element(2,E) =:= action  ->
