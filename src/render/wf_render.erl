@@ -36,7 +36,7 @@ r(Esc, [R | T]) when is_binary(R) -> r(Esc, [unicode:characters_to_list(R) | T])
 r(Esc, [A | T]) when is_atom(A) -> atom_to_list(A) ++ r(Esc, T);
 r(Esc, [$< | T]) when Esc =:= html; Esc =:= tag -> "&lt;" ++ r(esc, T);
 r(Esc, [$> | T]) when Esc =:= html; Esc =:= tag -> "&gt;" ++ r(esc, T);
-r(tag, [$" | T]) -> "&quot;" ++ r(esc, T);
+r(tag, [$" | T]) -> "&quot;" ++ r(tag, T);
 r(tag, [$ , $  | T]) -> r(tag, [$ |T]);
 r(tag, [$ , $\n | T]) -> r(tag, [$ |T]);
 r(tag, [$\n | T]) -> r(tag, [$ |T]);
