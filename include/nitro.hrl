@@ -6,6 +6,7 @@
 -endif.
 
 -record(raw, {v}).
+-record(htag, {t, v}).
 
 -define(DEFAULT_BASE, {?ELEMENT_BASE([])}).
 -define(DEFAULT_BASE_TAG(Tag), {?ELEMENT_BASE([],Tag,[])}).

@@ -25,7 +25,10 @@ r(Esc, [nil|T]) -> r(Esc, T);
 r(Esc, [[]|T]) -> r(Esc, T);
 r(Esc, [<<>>|T]) -> r(Esc, T);
 r(Esc, [A | T]) when is_atom(A) -> [atom_to_binary(A) | r(Esc, T)];
-r(Esc, [#raw{v = V} | T]) -> [V | r(Esc, T)];
+r(Esc, [#raw{v = V} | T]) -> [uto_bin(V) | r(Esc, T)];
+r(Esc, [#htag{t = Tag, v = V} | T]) ->
+  T1 = nitro:to_binary(Tag),
+  [$<, T1, $>, r(Esc, V), $<, $/, T1, $> | r(Esc, T)];
 r(Esc, [E|T]) when element(2,E) =:= element ->
   [wf_render_elements:render_element(E) | r(Esc, T)];
 r(Esc, [E|T]) when element(2,E) =:= action  ->
