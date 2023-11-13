@@ -22,7 +22,6 @@ emit_tag(TagName, Content, Props) -> [<<"<">>,TagName,write_props(Props),<<">">>
 write_props(Props) -> lists:map(fun display_property/1, Props).
 display_property({_, undefined}) -> [];
 display_property({_, []}) -> [];
-display_property({Prop, true}) -> [<<" ">>, nitro:to_binary(Prop)];
 display_property({<<"class">>=Id, Value}) -> prop({Id,Value});
 display_property({<<"data-toggle">>=Id, Value}) -> prop({Id,Value});
 display_property({Prop, Value}) -> [<<" ">>, nitro:to_binary(Prop), <<"=\"">>, wf_render:tag(Value), <<"\"">>].
