@@ -26,6 +26,8 @@ r(Esc, [[]|T]) -> r(Esc, T);
 r(Esc, [<<>>|T]) -> r(Esc, T);
 r(Esc, [A | T]) when is_atom(A) -> [atom_to_binary(A) | r(Esc, T)];
 r(Esc, [#raw{v = V} | T]) -> [uto_bin(V) | r(Esc, T)];
+r(Esc, [El | T]) when is_tuple(El), element(1, El) =:= el -> [el:r(El) | r(Esc, T)];
+r(Esc, [#{t := _} = El | T]) -> [el:r(El) | r(Esc, T)];
 r(Esc, [#htag{t = Tag, v = V} | T]) ->
   T1 = nitro:to_binary(Tag),
   [$<, T1, $>, r(Esc, V), $<, $/, T1, $> | r(Esc, T)];
